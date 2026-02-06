@@ -1,0 +1,1029 @@
+!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Bowl LX Prop Pool</title>
+    <style>
+        :root {
+            --seahawks-green: #69BE28;
+            --patriots-red: #C60C30;
+            --navy: #002244;
+            --gold: #FFD700;
+            --bg-dark: #0a0a1a;
+            --bg-card: #1a1a2e;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0c0;
+            --border-color: #2a2a4a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 50%, #0a0a1a 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 40px 20px 30px;
+            background: linear-gradient(180deg, var(--navy) 0%, transparent 100%);
+            border-radius: 16px;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            font-weight: 800;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+            background: linear-gradient(90deg, var(--seahawks-green), var(--gold), var(--patriots-red));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header .matchup {
+            font-size: 1.1em;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+        }
+
+        .header .buyin {
+            font-size: 0.95em;
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        /* Rules Section */
+        .rules-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+
+        .rules-section h2 {
+            font-size: 1.2em;
+            color: var(--gold);
+            margin-bottom: 16px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .rules-list {
+            list-style: none;
+            counter-reset: rules-counter;
+            padding: 0;
+        }
+
+        .rules-list li {
+            counter-increment: rules-counter;
+            position: relative;
+            padding: 10px 10px 10px 40px;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .rules-list li:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .rules-list li::before {
+            content: counter(rules-counter);
+            position: absolute;
+            left: 0;
+            top: 10px;
+            width: 26px;
+            height: 26px;
+            background: var(--navy);
+            border: 1px solid var(--seahawks-green);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            font-weight: 700;
+            color: var(--seahawks-green);
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 20px;
+            position: sticky;
+            top: 10px;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .progress-text {
+            font-size: 0.85em;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .progress-text span {
+            color: var(--seahawks-green);
+            font-weight: 700;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: var(--border-color);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--seahawks-green), var(--gold));
+            border-radius: 3px;
+            transition: width 0.4s ease;
+            width: 0%;
+        }
+
+        /* Section Cards */
+        .section {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+
+        /* Text Inputs */
+        .input-group {
+            margin-bottom: 14px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.8em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--seahawks-green);
+        }
+
+        .input-group input::placeholder {
+            color: rgba(255,255,255,0.25);
+        }
+
+        /* Prop Cards */
+        .prop-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 12px;
+            transition: border-color 0.3s;
+        }
+
+        .prop-card.answered {
+            border-color: var(--seahawks-green);
+        }
+
+        .prop-number {
+            font-size: 0.7em;
+            color: var(--seahawks-green);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .prop-title {
+            font-size: 1em;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .prop-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .prop-options.multi-option {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .option-btn {
+            padding: 10px 12px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            font-size: 0.9em;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        .multi-option .option-btn {
+            font-size: 0.8em;
+            text-transform: none;
+            padding: 8px 10px;
+        }
+
+        .option-btn:hover {
+            background: rgba(105, 190, 40, 0.1);
+            border-color: var(--seahawks-green);
+            color: var(--text-primary);
+        }
+
+        .option-btn.selected {
+            background: var(--seahawks-green);
+            border-color: var(--seahawks-green);
+            color: #000;
+            font-weight: 700;
+        }
+
+        /* Tiebreaker */
+        .tiebreaker-input {
+            width: 100%;
+            padding: 14px 16px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 1.2em;
+            text-align: center;
+            font-weight: 700;
+            transition: border-color 0.3s;
+        }
+
+        .tiebreaker-input:focus {
+            outline: none;
+            border-color: var(--gold);
+        }
+
+        .tiebreaker-hint {
+            font-size: 0.8em;
+            color: var(--text-secondary);
+            text-align: center;
+            margin-top: 8px;
+        }
+
+        /* Buttons */
+        .btn-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .submit-btn {
+            flex: 1;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--seahawks-green), #4a9e10);
+            border: none;
+            border-radius: 10px;
+            color: #000;
+            font-size: 1.1em;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(105, 190, 40, 0.4);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .copy-btn {
+            padding: 16px 24px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-secondary);
+            font-size: 0.9em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .copy-btn:hover {
+            background: rgba(255,255,255,0.15);
+            color: var(--text-primary);
+        }
+
+        /* Modal Overlay */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            border: 2px solid var(--seahawks-green);
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            max-width: 500px;
+            margin: 20px;
+        }
+
+        .modal-content h2 {
+            font-size: 1.8em;
+            color: var(--seahawks-green);
+            margin-bottom: 12px;
+        }
+
+        .modal-content p {
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+
+        .modal-close {
+            margin-top: 20px;
+            padding: 12px 32px;
+            background: var(--seahawks-green);
+            border: none;
+            border-radius: 8px;
+            color: #000;
+            font-weight: 700;
+            font-size: 1em;
+            cursor: pointer;
+        }
+
+        /* Disclaimer */
+        .disclaimer {
+            text-align: center;
+            font-size: 0.75em;
+            color: rgba(255,255,255,0.3);
+            padding: 20px;
+            line-height: 1.5;
+        }
+
+        footer {
+            text-align: center;
+            color: rgba(255,255,255,0.2);
+            font-size: 0.8em;
+            padding: 20px 0 40px;
+        }
+
+        /* Confetti */
+        .confetti {
+            position: fixed;
+            top: -10px;
+            z-index: 1001;
+            pointer-events: none;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(110vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* Leaderboard */
+        .leaderboard-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 16px;
+        }
+
+        .leaderboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .leaderboard-header h2 {
+            font-size: 1.1em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--gold);
+            font-weight: 700;
+        }
+
+        .refresh-btn {
+            padding: 6px 14px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-secondary);
+            font-size: 0.8em;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .refresh-btn:hover {
+            background: rgba(105, 190, 40, 0.15);
+            border-color: var(--seahawks-green);
+            color: var(--text-primary);
+        }
+
+        .leaderboard-status {
+            text-align: center;
+            padding: 8px;
+            margin-bottom: 14px;
+            font-size: 0.85em;
+            color: var(--text-secondary);
+            background: rgba(255,255,255,0.03);
+            border-radius: 8px;
+        }
+
+        .leaderboard-status strong {
+            color: var(--seahawks-green);
+        }
+
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .leaderboard-table th {
+            font-size: 0.75em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+            padding: 8px 10px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .leaderboard-table th:first-child,
+        .leaderboard-table td:first-child {
+            text-align: center;
+            width: 50px;
+        }
+
+        .leaderboard-table th:nth-child(3),
+        .leaderboard-table td:nth-child(3) {
+            text-align: center;
+            width: 60px;
+        }
+
+        .leaderboard-table th:nth-child(4),
+        .leaderboard-table td:nth-child(4) {
+            text-align: center;
+            width: 50px;
+        }
+
+        .leaderboard-table td {
+            padding: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            font-size: 0.95em;
+        }
+
+        .leaderboard-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .rank-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: 0.85em;
+        }
+
+        .rank-1 { background: var(--gold); color: #000; }
+        .rank-2 { background: #C0C0C0; color: #000; }
+        .rank-3 { background: #CD7F32; color: #fff; }
+        .rank-other { background: rgba(255,255,255,0.1); color: var(--text-secondary); }
+
+        .score-value {
+            font-weight: 700;
+            color: var(--seahawks-green);
+        }
+
+        .tb-value {
+            font-size: 0.85em;
+            color: var(--text-secondary);
+        }
+
+        .leaderboard-empty {
+            text-align: center;
+            padding: 30px 20px;
+            color: var(--text-secondary);
+            font-size: 0.9em;
+        }
+
+        .leaderboard-loading {
+            text-align: center;
+            padding: 30px 20px;
+            color: var(--text-secondary);
+        }
+
+        .entry-count-badge {
+            display: inline-block;
+            background: rgba(105, 190, 40, 0.15);
+            color: var(--seahawks-green);
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+
+        /* Responsive */
+        @media (max-width: 500px) {
+            .header h1 { font-size: 1.8em; }
+            .prop-options.multi-option { grid-template-columns: 1fr 1fr; }
+            .btn-row { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h1>SUPER BOWL LX</h1>
+            <div class="matchup">Seattle Seahawks vs New England Patriots</div>
+            <div class="buyin">$20 Buy-In &bull; Prize Pool Eligible</div>
+        </div>
+
+        <div class="rules-section">
+            <h2>Rules &amp; Info</h2>
+            <ol class="rules-list">
+                <li>The latest picks will be accepted at <strong>5:00 PM EST on Sunday, 2/9/26</strong>. Venmo $20 to <strong>@colewendt</strong> before kickoff to count as an entry. Once the form has been closed, you will receive an invite to the Google Sheet to track the standings.</li>
+                <li>The Google Sheet will not be updated completely in real-time during the Super Bowl. I will try my best to do it throughout the game, but I would like to enjoy the game and not be staring at the computer, so final tallies will happen after the game.</li>
+                <li>Payout is <strong>50%</strong> of the total pot to 1st place, <strong>30%</strong> to 2nd place, <strong>15%</strong> to 3rd place, and <strong>5%</strong> to last place.</li>
+                <li>Tiebreaker will be the difference from the total combined score. If the tiebreaker doesn't settle the tie, the pot will be split equally between all individuals involved.</li>
+                <li>The lines set in this form will not be adjusted. Take advantage where you find it.</li>
+                <li>Feel free to share this form with anyone!</li>
+            </ol>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-text">Progress: <span id="progressCount">0</span> / <span id="progressTotal">36</span> Complete</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Your Information</div>
+            <div class="input-group">
+                <label>Full Name</label>
+                <input type="text" id="nameInput" placeholder="Enter your full name" required>
+            </div>
+            <div class="input-group">
+                <label>Email</label>
+                <input type="email" id="emailInput" placeholder="Enter your email address" required>
+            </div>
+            <div class="input-group">
+                <label>Venmo Username</label>
+                <input type="text" id="venmoInput" placeholder="@your-venmo-handle" required>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Your Picks</div>
+            <div id="propsContainer"></div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Tiebreaker Question</div>
+            <div class="prop-card">
+                <div class="prop-title">Total Points Scored (Both Teams Combined)</div>
+                <input type="number" class="tiebreaker-input" id="tiebreakerInput" placeholder="0" min="0" max="200">
+                <div class="tiebreaker-hint">Used to break ties in the pool. Be strategic!</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="btn-row">
+                <button class="submit-btn" id="submitBtn" disabled>Submit My Picks</button>
+                <button class="copy-btn" id="copyBtn">Copy to Clipboard</button>
+            </div>
+        </div>
+
+        <div class="disclaimer">
+            &#9888;&#65039; GAMBLING DISCLAIMER: This prop pool is for entertainment purposes only. Only participate with money you can afford to lose. Must be 21+. Please gamble responsibly. If you or someone you know has a gambling problem, visit 1-800-GAMBLER.
+        </div>
+
+        <div class="leaderboard-section" id="leaderboardSection">
+            <div class="leaderboard-header">
+                <h2>Live Standings</h2>
+                <button class="refresh-btn" id="refreshBtn" onclick="fetchLeaderboard()">Refresh</button>
+            </div>
+            <div id="leaderboardContent">
+                <div class="leaderboard-loading">Loading standings...</div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Super Bowl LX Prop Pool &bull; Stay sharp, play responsibly &bull; Questions? Contact the pool organizer</p>
+    </footer>
+
+    <!-- Success Modal -->
+    <div class="modal-overlay" id="successModal">
+        <div class="modal-content">
+            <h2>Picks Submitted!</h2>
+            <p>Your entry has been recorded.</p>
+            <p>Don't forget to Venmo <strong>$20 to @colewendt</strong> before kickoff on Sunday, February 9th!</p>
+            <p>Good luck!</p>
+            <button class="modal-close" onclick="document.getElementById('successModal').classList.remove('active')">Got It!</button>
+        </div>
+    </div>
+
+    <script>
+        // ========================================
+        // CONFIGURATION - UPDATE THIS URL
+        // ========================================
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyBUCe1pypiDEPQzbXWTzKizfuqx8MxhURCaKqr0oCq_hkWxPpsQ335s7CrcxfpuZNpXQ/exec';
+
+        // ========================================
+        // PROPS DEFINITION (32 props)
+        // ========================================
+        const PROPS = [
+            { id: 1,  title: "Coin Toss Result", options: ["Heads", "Tails"], category: "team" },
+            { id: 2,  title: "Length of the National Anthem", options: ["Over 95 Seconds", "Under 95 Seconds"], category: "over-under" },
+            { id: 3,  title: "Bad Bunny Halftime Opener", options: ["Titi Me Pregunto", "BAILE INoLVIDABLE", "MONACO", "LA MuDANZA", "NUEVAYoL", "Chambea", "Other"], category: "yes-no" },
+            { id: 4,  title: "First Offensive Play From Scrimmage", options: ["Pass", "Run"], category: "team" },
+            { id: 5,  title: "Team to Record First 1st Down", options: ["Seattle", "New England"], category: "team" },
+            { id: 6,  title: "Jersey Number of First Touchdown Scorer", options: ["Over 11.5", "Under 11.5"], category: "over-under" },
+            { id: 7,  title: "First Team to 10 Points", options: ["Seattle", "New England"], category: "team" },
+            { id: 8,  title: "Total Yards of Longest Field Goal", options: ["Over 46.5", "Under 46.5"], category: "over-under" },
+            { id: 9,  title: "Team to Score Longest Touchdown", options: ["Seattle", "New England"], category: "team" },
+            { id: 10, title: "Total Successful Field Goals", options: ["Over 3.5", "Under 3.5"], category: "over-under" },
+            { id: 11, title: "Total Players to Attempt a Pass", options: ["Over 2.5", "Under 2.5"], category: "over-under" },
+            { id: 12, title: "Either Team to Miss an Extra Point", options: ["Yes", "No"], category: "yes-no" },
+            { id: 13, title: "Shortest Touchdown Scored", options: ["Over 1.5 Yards", "Under 1.5 Yards"], category: "over-under" },
+            { id: 14, title: "Last Team to Score", options: ["Seattle", "New England"], category: "team" },
+            { id: 15, title: "Last Play of the Game to be a Kneel Down", options: ["Yes", "No"], category: "yes-no" },
+            { id: 16, title: "Total Touchdowns", options: ["Over 5.5", "Under 5.5"], category: "over-under" },
+            { id: 17, title: "Will Game Go to Overtime", options: ["Yes", "No"], category: "yes-no" },
+            { id: 18, title: "Total Points Scored", options: ["Over 45.5", "Under 45.5"], category: "over-under" },
+            { id: 19, title: "Winning Team", options: ["Seattle", "New England"], category: "team" },
+            { id: 20, title: "Sam Darnold Passing Yards", options: ["Over 230.5", "Under 230.5"], category: "over-under" },
+            { id: 21, title: "Drake Maye Passing Yards", options: ["Over 225.5", "Under 225.5"], category: "over-under" },
+            { id: 22, title: "Kenneth Walker Rushing Yards", options: ["Over 72.5", "Under 72.5"], category: "over-under" },
+            { id: 23, title: "Rhamondre Stevenson Rushing Yards", options: ["Over 50.5", "Under 50.5"], category: "over-under" },
+            { id: 24, title: "Jaxon Smith-Njigba Receiving Yards", options: ["Over 96.5", "Under 96.5"], category: "over-under" },
+            { id: 25, title: "Stefon Diggs Receiving Yards", options: ["Over 45.5", "Under 45.5"], category: "over-under" },
+            { id: 26, title: "MVP Position", options: ["QB", "Other"], category: "team" },
+            { id: 27, title: "Color of Gatorade Bath", options: ["Yellow or Green", "Other"], category: "team" },
+            { id: 28, title: "Game Line", options: ["Seahawks -4.5", "Patriots +4.5"], category: "team" },
+            { id: 29, title: "Total Turnovers", options: ["Over 2.5", "Under 2.5"], category: "over-under" },
+            { id: 30, title: "Total Sacks", options: ["Over 4.5", "Under 4.5"], category: "over-under" },
+            { id: 31, title: "Longest Reception", options: ["Over 27.5 Yards", "Under 27.5 Yards"], category: "over-under" },
+            { id: 32, title: "Longest Rush", options: ["Over 14.5 Yards", "Under 14.5 Yards"], category: "over-under" }
+        ];
+
+        // ========================================
+        // STATE
+        // ========================================
+        const picks = {};
+        let nameVal = '';
+        let emailVal = '';
+        let venmoVal = '';
+        let tiebreakerVal = '';
+
+        const totalRequired = PROPS.length + 4; // 32 props + name + email + venmo + tiebreaker = 36
+
+        // ========================================
+        // RENDER PROPS
+        // ========================================
+        function renderProps() {
+            const container = document.getElementById('propsContainer');
+            container.innerHTML = '';
+
+            PROPS.forEach(prop => {
+                const card = document.createElement('div');
+                card.className = 'prop-card' + (picks[prop.id] ? ' answered' : '');
+                card.id = 'prop-card-' + prop.id;
+
+                const isMulti = prop.options.length > 2;
+
+                card.innerHTML = `
+                    <div class="prop-number">Prop ${prop.id} of ${PROPS.length}</div>
+                    <div class="prop-title">${prop.title}</div>
+                    <div class="prop-options${isMulti ? ' multi-option' : ''}">
+                        ${prop.options.map(opt => `
+                            <button class="option-btn${picks[prop.id] === opt ? ' selected' : ''}"
+                                    onclick="selectPick(${prop.id}, '${opt.replace(/'/g, "\\'")}', this)">
+                                ${opt}
+                            </button>
+                        `).join('')}
+                    </div>
+                `;
+
+                container.appendChild(card);
+            });
+        }
+
+        // ========================================
+        // INTERACTIONS
+        // ========================================
+        function selectPick(propId, value, btn) {
+            picks[propId] = value;
+
+            // Update buttons in this card
+            const card = document.getElementById('prop-card-' + propId);
+            card.classList.add('answered');
+            card.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+
+            updateProgress();
+        }
+
+        function updateProgress() {
+            let count = 0;
+            if (nameVal.trim()) count++;
+            if (emailVal.trim()) count++;
+            if (venmoVal.trim()) count++;
+            count += Object.keys(picks).length;
+            if (tiebreakerVal.trim()) count++;
+
+            document.getElementById('progressCount').textContent = count;
+            document.getElementById('progressTotal').textContent = totalRequired;
+
+            const pct = Math.round((count / totalRequired) * 100);
+            document.getElementById('progressFill').style.width = pct + '%';
+
+            document.getElementById('submitBtn').disabled = (count < totalRequired);
+        }
+
+        // Input listeners
+        document.getElementById('nameInput').addEventListener('input', function() {
+            nameVal = this.value;
+            updateProgress();
+        });
+
+        document.getElementById('emailInput').addEventListener('input', function() {
+            emailVal = this.value;
+            updateProgress();
+        });
+
+        document.getElementById('venmoInput').addEventListener('input', function() {
+            venmoVal = this.value;
+            updateProgress();
+        });
+
+        document.getElementById('tiebreakerInput').addEventListener('input', function() {
+            tiebreakerVal = this.value;
+            updateProgress();
+        });
+
+        // ========================================
+        // BUILD PAYLOAD
+        // ========================================
+        function buildPayload() {
+            const payload = {
+                name: nameVal.trim(),
+                email: emailVal.trim(),
+                venmo: venmoVal.trim(),
+                tiebreaker: tiebreakerVal.trim(),
+                timestamp: new Date().toISOString()
+            };
+
+            PROPS.forEach(prop => {
+                payload['prop' + prop.id] = picks[prop.id] || '';
+            });
+
+            return payload;
+        }
+
+        // ========================================
+        // SUBMIT
+        // ========================================
+        document.getElementById('submitBtn').addEventListener('click', async function() {
+            const btn = this;
+            btn.disabled = true;
+            btn.textContent = 'Submitting...';
+
+            const payload = buildPayload();
+
+            // Check if Google Script URL is configured
+            if (GOOGLE_SCRIPT_URL === 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
+                // Fallback: copy to clipboard
+                const text = JSON.stringify(payload, null, 2);
+                try {
+                    await navigator.clipboard.writeText(text);
+                    alert('Google Script URL not configured yet. Your picks have been copied to clipboard instead. Send them to the pool organizer!');
+                } catch(e) {
+                    prompt('Copy your picks below:', JSON.stringify(payload));
+                }
+                btn.disabled = false;
+                btn.textContent = 'Submit My Picks';
+                return;
+            }
+
+            try {
+                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(payload)
+                });
+
+                // no-cors means we can't read the response, but if we got here it sent
+                showSuccess();
+            } catch (err) {
+                alert('Error submitting picks. Please try again or copy to clipboard.');
+                console.error('Submit error:', err);
+                btn.disabled = false;
+                btn.textContent = 'Submit My Picks';
+            }
+        });
+
+        // ========================================
+        // COPY TO CLIPBOARD
+        // ========================================
+        document.getElementById('copyBtn').addEventListener('click', async function() {
+            const payload = buildPayload();
+            let text = `SUPER BOWL LX PROP POOL ENTRY\n`;
+            text += `Name: ${payload.name}\n`;
+            text += `Email: ${payload.email}\n`;
+            text += `Venmo: ${payload.venmo}\n`;
+            text += `---\n`;
+            PROPS.forEach(prop => {
+                text += `${prop.id}. ${prop.title}: ${payload['prop' + prop.id] || '(not answered)'}\n`;
+            });
+            text += `---\n`;
+            text += `Tiebreaker (Total Points): ${payload.tiebreaker}\n`;
+
+            try {
+                await navigator.clipboard.writeText(text);
+                this.textContent = 'Copied!';
+                setTimeout(() => this.textContent = 'Copy to Clipboard', 2000);
+            } catch(e) {
+                prompt('Copy your picks:', text);
+            }
+        });
+
+        // ========================================
+        // SUCCESS MODAL + CONFETTI
+        // ========================================
+        function showSuccess() {
+            document.getElementById('successModal').classList.add('active');
+            launchConfetti();
+        }
+
+        function launchConfetti() {
+            const colors = ['#69BE28', '#C60C30', '#FFD700', '#002244', '#FFFFFF'];
+            for (let i = 0; i < 80; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.width = (Math.random() * 10 + 5) + 'px';
+                    confetti.style.height = (Math.random() * 10 + 5) + 'px';
+                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+                    confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                    document.body.appendChild(confetti);
+                    setTimeout(() => confetti.remove(), 4000);
+                }, i * 30);
+            }
+        }
+
+        // ========================================
+        // LEADERBOARD
+        // ========================================
+        async function fetchLeaderboard() {
+            const container = document.getElementById('leaderboardContent');
+            const refreshBtn = document.getElementById('refreshBtn');
+
+            if (GOOGLE_SCRIPT_URL === 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
+                container.innerHTML = '<div class="leaderboard-empty">Leaderboard will be available once the pool is live.</div>';
+                return;
+            }
+
+            refreshBtn.textContent = 'Loading...';
+            refreshBtn.disabled = true;
+
+            try {
+                const response = await fetch(GOOGLE_SCRIPT_URL + '?action=leaderboard');
+                const data = await response.json();
+
+                if (data.error) {
+                    container.innerHTML = '<div class="leaderboard-empty">' + data.error + '</div>';
+                    refreshBtn.textContent = 'Refresh';
+                    refreshBtn.disabled = false;
+                    return;
+                }
+
+                let html = '';
+
+                // Status bar
+                html += '<div class="leaderboard-status">';
+                html += '<span class="entry-count-badge">' + data.totalEntries + ' Entr' + (data.totalEntries === 1 ? 'y' : 'ies') + '</span> &nbsp; ';
+                if (data.gameStarted) {
+                    html += '<strong>' + data.answersEntered + '</strong> of <strong>' + data.totalProps + '</strong> props scored';
+                } else {
+                    html += 'Game hasn\'t started yet — standings will update once answers are entered';
+                }
+                html += '</div>';
+
+                if (data.leaderboard.length === 0) {
+                    html += '<div class="leaderboard-empty">No entries yet. Be the first to submit your picks!</div>';
+                } else {
+                    html += '<table class="leaderboard-table">';
+                    html += '<thead><tr><th>Rank</th><th>Name</th><th>Score</th><th>TB</th></tr></thead>';
+                    html += '<tbody>';
+
+                    data.leaderboard.forEach(function(entry) {
+                        const rankClass = entry.rank <= 3 ? 'rank-' + entry.rank : 'rank-other';
+                        html += '<tr>';
+                        html += '<td><span class="rank-badge ' + rankClass + '">' + (entry.rank || '-') + '</span></td>';
+                        html += '<td>' + entry.name + '</td>';
+                        html += '<td><span class="score-value">' + entry.score + '</span><span style="color:rgba(255,255,255,0.3);">/' + data.totalProps + '</span></td>';
+                        html += '<td class="tb-value">' + (entry.tiebreaker || '-') + '</td>';
+                        html += '</tr>';
+                    });
+
+                    html += '</tbody></table>';
+                }
+
+                container.innerHTML = html;
+            } catch (err) {
+                console.error('Leaderboard fetch error:', err);
+                container.innerHTML = '<div class="leaderboard-empty">Couldn\'t load standings. Try refreshing.</div>';
+            }
+
+            refreshBtn.textContent = 'Refresh';
+            refreshBtn.disabled = false;
+        }
+
+        // ========================================
+        // INIT
+        // ========================================
+        renderProps();
+        updateProgress();
+        fetchLeaderboard();
+    </script>
+
+</body>
+</html>
